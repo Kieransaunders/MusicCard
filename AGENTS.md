@@ -8,7 +8,8 @@
 
 This is a **static, single-page demo** that reproduces the official MindAR multi-target A-Frame example. It runs entirely in the browser and uses the webcam for image-tracked augmented reality.
 
-- **Entry point:** `index.html`
+- **Entry point:** `index.html` (homepage showing QR code and target images)
+- **AR demo:** `demo.html` (the A-Frame + MindAR scene)
 - **No build system:** The project is plain HTML/CSS/JS with dependencies loaded from CDN.
 - **Local serve required:** Browsers restrict camera access to secure contexts (`localhost` or HTTPS), so the page must be served with a local web server rather than opened directly from the file system.
 
@@ -18,7 +19,7 @@ This is a **static, single-page demo** that reproduces the official MindAR multi
 
 | Layer | Technology | Version / Notes |
 |-------|------------|-----------------|
-| Base | HTML5 + CSS + vanilla JS | Inline styles and scripts in `index.html` |
+| Base | HTML5 + CSS + vanilla JS | Inline styles and scripts in `index.html` and `demo.html` |
 | WebXR framework | A-Frame | `1.5.0` loaded from `https://aframe.io/releases/1.5.0/aframe.min.js` |
 | Extras | aframe-extras | `7.0.0` loaded from `jsdelivr` (provides `animation-mixer`) |
 | AR tracking | MindAR | `1.2.5` loaded from `jsdelivr` (`mindar-image-aframe.prod.js`) |
@@ -30,9 +31,10 @@ This is a **static, single-page demo** that reproduces the official MindAR multi
 
 ```
 /Volumes/External/DevExteralHD/MindAR with example
-├── index.html                                    # Single demo page (scene, styles, scripts)
+├── index.html                                    # Homepage: QR code + target images
+├── demo.html                                     # AR demo page (scene, styles, scripts)
 ├── README.md                                     # Human-facing run instructions & troubleshooting
-├── aktasok-salsa-151315.mp3                      # Unreferenced audio file (orphaned)
+├── aktasok-salsa-151315.mp3                      # Background music for the AR demo
 ├── docs/
 │   └── plans/
 │       ├── 2026-04-01-mindar-multi-target-design.md   # Design record
@@ -41,7 +43,8 @@ This is a **static, single-page demo** that reproduces the official MindAR multi
 
 ### Key Files
 
-- **`index.html`** — Contains the full A-Frame scene, two `mindar-image-target` entities, an instruction overlay, status indicator, and all JavaScript event handling for camera start / AR ready / target found / target lost.
+- **`index.html`** — Companion homepage with the QR code, target image previews, and a link to the AR demo.
+- **`demo.html`** — Contains the full A-Frame scene, two `mindar-image-target` entities, an instruction overlay, status indicator, and all JavaScript event handling for camera start / AR ready / target found / target lost.
 - **`README.md`** — Describes how to run the local server, where to find test images, and how to debug camera-permission issues.
 - **`docs/plans/*.md`** — Design and implementation planning artifacts. These are read-only historical records.
 
@@ -87,8 +90,8 @@ python3 -m http.server 8000 --directory "/Volumes/External/DevExteralHD/MindAR w
 
 Then open:
 
-- http://127.0.0.1:8000
-- http://127.0.0.1:8000/index.html
+- http://127.0.0.1:8000 — homepage
+- http://127.0.0.1:8000/demo.html — AR demo
 
 ### Quick Verification (No Camera)
 
@@ -96,13 +99,13 @@ Then open:
 curl -s http://127.0.0.1:8000/ | head -n 5
 ```
 
-Expected: the first lines of `index.html` starting with `<!doctype html>`.
+Expected: the first lines of `demo.html` starting with `<!doctype html>`.
 
 ---
 
 ## Code Style Guidelines
 
-- **Single-file demo:** All markup, styles, and scripts live in `index.html`. If the demo grows, prefer keeping it lightweight rather than introducing a bundler.
+- **Single-file demo:** All markup, styles, and scripts live in `index.html` and `demo.html`. If the demo grows, prefer keeping it lightweight rather than introducing a bundler.
 - **CSS variables:** The overlay uses a `:root` theming block (`--panel-bg`, `--accent-start`, etc.). Continue using CSS custom properties for any new UI additions.
 - **Event-driven JS:** The code relies on A-Frame/MindAR custom events (`loaded`, `renderstart`, `arReady`, `arError`, `targetFound`, `targetLost`). Attach listeners to `sceneEl` or the target entities rather than polling.
 - **Accessibility / UX:** Provide clear status text and disable buttons while async operations (camera start) are in flight.
@@ -131,6 +134,6 @@ There are **no automated tests** in this repository. Validation is manual:
 
 ## Common Modifications
 
-- **Switch to local assets:** Download `band.mind`, `raccoon/scene.gltf`, and `bear/scene.gltf` into a new `assets/` folder, then replace the CDN URLs in `index.html` with relative paths (e.g., `assets/band.mind`).
+- **Switch to local assets:** Download `band.mind`, `raccoon/scene.gltf`, and `bear/scene.gltf` into a new `assets/` folder, then replace the CDN URLs in `demo.html` with relative paths (e.g., `assets/band.mind`).
 - **Add more targets:** The current `.mind` file supports exactly two targets. To add more you must generate a new target database with the MindAR compiler and update the scene accordingly.
 - **Change model placement:** Edit the `rotation`, `position`, and `scale` attributes on the `<a-gltf-model>` elements inside each `<a-entity mindar-image-target>`.
