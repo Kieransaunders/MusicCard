@@ -149,6 +149,66 @@
         font-size: 0.82rem;
       }
 
+      .targets {
+        margin-top: 0.9rem;
+      }
+
+      .target-list {
+        display: flex;
+        gap: 0.6rem;
+        margin-top: 0.4rem;
+      }
+
+      .target-list a {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.35rem;
+        border-radius: 0.6rem;
+        background: rgba(148, 163, 184, 0.1);
+        text-decoration: none;
+        color: var(--text);
+        font-size: 0.75rem;
+        font-weight: 600;
+        transition: background 120ms ease;
+      }
+
+      .target-list a:hover {
+        background: rgba(148, 163, 184, 0.2);
+      }
+
+      .target-list img {
+        width: 3.6rem;
+        height: 3.6rem;
+        object-fit: cover;
+        border-radius: 0.4rem;
+        border: 1px solid var(--panel-border);
+      }
+
+      .qr {
+        display: flex;
+        align-items: center;
+        gap: 0.7rem;
+        margin-top: 0.9rem;
+        padding: 0.5rem 0.6rem;
+        border-radius: 0.7rem;
+        background: rgba(255, 255, 255, 0.06);
+      }
+
+      .qr img {
+        width: 4.2rem;
+        height: 4.2rem;
+        border-radius: 0.35rem;
+        background: white;
+      }
+
+      .qr span {
+        font-size: 0.8rem;
+        color: var(--muted);
+        line-height: 1.35;
+      }
+
       @media (max-width: 640px) {
         .overlay {
           top: auto;
@@ -300,11 +360,30 @@
       </p>
       <div class="links">
         <button id="start-camera" disabled>Start Camera</button>
-        <a href="https://hiukim.github.io/mind-ar-js-doc/assets/images/raccoon-2ef571baece2ee4724d0d19edf3de791.png" target="_blank" rel="noreferrer">Open raccoon target</a>
-        <a href="https://hiukim.github.io/mind-ar-js-doc/assets/images/bear-3c737546fb0bde7a9c45b45ee999d132.png" target="_blank" rel="noreferrer">Open bear target</a>
+        <a href="markers.html">View targets &amp; QR</a>
       </div>
+
+      <div class="targets">
+        <p class="note">Point your camera at one of these target images:</p>
+        <div class="target-list">
+          <a href="target-raccoon.png" target="_blank" rel="noreferrer">
+            <img src="target-raccoon.png" alt="Raccoon target" />
+            <span>Raccoon</span>
+          </a>
+          <a href="target-bear.png" target="_blank" rel="noreferrer">
+            <img src="target-bear.png" alt="Bear target" />
+            <span>Bear</span>
+          </a>
+        </div>
+      </div>
+
+      <div class="qr">
+        <img src="qr-code.png" alt="QR code to this site" />
+        <span>Scan to open this demo on your phone</span>
+      </div>
+
       <p class="note">
-        Run this page from <code>localhost</code>. This panel hides once the camera is running so the scanning view stays clear.
+        This panel hides once the camera is running so the scanning view stays clear.
       </p>
     </aside>
 
