@@ -46,12 +46,34 @@ Then open:
 
 Once the page loads, click **Start Camera**.
 
-## Test images
+## How to test
 
-Open these on another device, on another monitor, or print them:
+### Quick test (live demo)
 
-- Raccoon target: `target-raccoon.png` (or https://hiukim.github.io/mind-ar-js-doc/assets/images/raccoon-2ef571baece2ee4724d0d19edf3de791.png)
-- Bear target: `target-bear.png` (or https://hiukim.github.io/mind-ar-js-doc/assets/images/bear-3c737546fb0bde7a9c45b45ee999d132.png)
+1. On your phone, open the live demo: **https://mindar-multi-target-demo.netlify.app**
+   - Or scan the `qr-code.png` to jump straight to it.
+2. On a second device (or a printed page), open the markers page: **https://mindar-multi-target-demo.netlify.app/markers.html**
+3. Tap **Start Camera** on the phone and allow camera access.
+4. Point the phone at either the **Raccoon** or **Bear** target image.
+5. When tracking locks on:
+   - The 3D model appears over the image
+   - The background music starts playing
+   - The status text updates (e.g. "Raccoon target found")
+6. Move the target out of view — the model disappears and the music pauses.
+
+### Local test
+
+1. Serve the folder locally (see [Run locally](#run-locally)).
+2. Open `http://127.0.0.1:8000/index.html` on a device with a camera.
+3. Open `http://127.0.0.1:8000/markers.html` on another screen, or print the targets from that page.
+4. Click **Start Camera** and point the camera at the Raccoon or Bear target.
+
+### Target images
+
+You can also open the raw target images directly:
+
+- Raccoon target: `target-raccoon.png`
+- Bear target: `target-bear.png`
 
 ## Current setup
 
