@@ -7,27 +7,57 @@
     <style>
       :root {
         --bg: #0b1220;
-        --panel: rgba(255, 255, 255, 0.06);
-        --border: rgba(148, 163, 184, 0.25);
+        --panel: rgba(255, 255, 255, 0.08);
+        --panel-border: rgba(148, 163, 184, 0.25);
         --text: #f8fafc;
         --muted: #cbd5e1;
-        --accent: #67e8f9;
+        --accent-start: #67e8f9;
+        --accent-end: #a5f3fc;
       }
 
       * {
         box-sizing: border-box;
       }
 
-      body {
+      html, body {
+        height: 100%;
         margin: 0;
-        padding: 2rem 1rem;
         font-family: "Trebuchet MS", "Segoe UI", sans-serif;
         background: var(--bg);
         color: var(--text);
+      }
+
+      a-scene {
+        position: fixed !important;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        z-index: 0;
+      }
+
+      .a-canvas {
+        background: transparent !important;
+      }
+
+      .overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 10;
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 1.5rem;
+        justify-content: flex-start;
+        gap: 1.25rem;
+        padding: 2rem 1rem;
+        overflow-y: auto;
+        background: var(--bg);
+        transition: opacity 220ms ease, transform 220ms ease;
+      }
+
+      .overlay.is-dismissed {
+        opacity: 0;
+        pointer-events: none;
+        transform: translateY(-0.5rem);
       }
 
       h1 {
@@ -36,7 +66,7 @@
         text-align: center;
       }
 
-      p {
+      .tagline {
         margin: 0;
         color: var(--muted);
         text-align: center;
@@ -49,7 +79,7 @@
         padding: 1.25rem;
         border-radius: 1rem;
         background: var(--panel);
-        border: 1px solid var(--border);
+        border: 1px solid var(--panel-border);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -59,13 +89,45 @@
       .card h2 {
         margin: 0;
         font-size: 1rem;
-        color: var(--accent);
+        color: var(--accent-start);
       }
 
       .card img {
         max-width: 100%;
         border-radius: 0.5rem;
         background: white;
+      }
+
+      .status-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        padding: 0.35rem 0.65rem;
+        border-radius: 999px;
+        background: rgba(148, 163, 184, 0.2);
+        color: #e2e8f0;
+        font-size: 0.82rem;
+        font-weight: 700;
+      }
+
+      .status-pill::before {
+        content: "";
+        width: 0.58rem;
+        height: 0.58rem;
+        border-radius: 999px;
+        background: #94a3b8;
+      }
+
+      .status-pill[data-tone="ready"]::before {
+        background: #facc15;
+      }
+
+      .status-pill[data-tone="live"]::before {
+        background: #4ade80;
+      }
+
+      .status-pill[data-tone="error"]::before {
+        background: #f87171;
       }
 
       .targets {
@@ -79,7 +141,7 @@
         padding: 1rem;
         border-radius: 1rem;
         background: var(--panel);
-        border: 1px solid var(--border);
+        border: 1px solid var(--panel-border);
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -88,7 +150,7 @@
 
       .target img {
         width: 100%;
-        max-height: 42vh;
+        max-height: 36vh;
         object-fit: contain;
         border-radius: 0.5rem;
         background: white;
@@ -105,7 +167,7 @@
         padding: 0.9rem 1.6rem;
         border-radius: 999px;
         border: 0;
-        background: linear-gradient(135deg, #67e8f9, #a5f3fc);
+        background: linear-gradient(135deg, var(--accent-start), var(--accent-end));
         color: #082f49;
         font-size: 1.05rem;
         font-weight: 700;
@@ -115,13 +177,32 @@
         transition: transform 120ms ease, box-shadow 120ms ease;
       }
 
-      .btn:hover {
+      .btn:hover:not(:disabled) {
         transform: translateY(-1px);
         box-shadow: 0 10px 24px rgba(103, 232, 249, 0.35);
       }
 
+      .btn:disabled {
+        cursor: wait;
+        opacity: 0.65;
+      }
+
+      .helper {
+        margin: 0.25rem 0 0;
+        color: var(--muted);
+        font-size: 0.85rem;
+        text-align: center;
+      }
+
+      .note {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.82rem;
+        text-align: center;
+      }
+
       @media print {
-        body {
+        body, .overlay {
           background: white;
           color: black;
         }
@@ -129,37 +210,207 @@
           border: 1px solid #ccc;
           background: white;
         }
-        .btn {
+        .btn, .status-pill, .helper {
           display: none;
         }
       }
+
+      @media (max-width: 640px) {
+        .targets {
+          width: 100%;
+        }
+        .target img {
+          max-height: 28vh;
+        }
+      }
     </style>
+    <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v7.0.0/dist/aframe-extras.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const sceneEl = document.querySelector("a-scene");
+        const startButton = document.querySelector("#start-camera");
+        const statusEl = document.querySelector("#camera-status");
+        const helperEl = document.querySelector("#camera-helper");
+        const overlayEl = document.querySelector(".overlay");
+        const targetZero = document.querySelector("#target-zero");
+        const targetOne = document.querySelector("#target-one");
+        const bgm = document.querySelector("#bgm");
+        let arSystem = null;
+
+        const setStatus = (message, tone, helperText) => {
+          statusEl.textContent = message;
+          statusEl.dataset.tone = tone;
+          if (helperEl) helperEl.textContent = helperText;
+        };
+
+        sceneEl.addEventListener("loaded", () => {
+          arSystem = sceneEl.systems["mindar-image-system"];
+          startButton.disabled = false;
+          setStatus(
+            "Ready to start camera",
+            "ready",
+            "Click Start Camera, then allow webcam access if your browser asks."
+          );
+          overlayEl.classList.remove("is-dismissed");
+        });
+
+        sceneEl.addEventListener("renderstart", () => {
+          if (sceneEl.renderer) {
+            sceneEl.renderer.setClearColor(0x000000, 0);
+          }
+          if (sceneEl.canvas) {
+            sceneEl.canvas.style.background = "transparent";
+            sceneEl.canvas.style.position = "relative";
+            sceneEl.canvas.style.zIndex = "1";
+          }
+        });
+
+        startButton.addEventListener("click", async () => {
+          if (!arSystem) return;
+          startButton.disabled = true;
+          setStatus(
+            "Starting camera",
+            "ready",
+            "If your browser asks for camera access, allow it and wait a moment."
+          );
+
+          const listener = sceneEl.audioListener;
+          if (listener && listener.context && listener.context.state === "suspended") {
+            await listener.context.resume();
+          }
+
+          try {
+            await arSystem.start();
+          } catch (error) {
+            console.error(error);
+            startButton.disabled = false;
+            setStatus(
+              "Camera failed to start",
+              "error",
+              "Check your browser's camera permissions, close any app using the webcam, and reload."
+            );
+          }
+        });
+
+        sceneEl.addEventListener("arReady", () => {
+          if (arSystem && arSystem.video) {
+            arSystem.video.style.zIndex = "0";
+            arSystem.video.style.background = "transparent";
+          }
+          overlayEl.classList.add("is-dismissed");
+        });
+
+        sceneEl.addEventListener("arError", () => {
+          startButton.disabled = false;
+          overlayEl.classList.remove("is-dismissed");
+          setStatus(
+            "MindAR could not start",
+            "error",
+            "Confirm browser and system camera access, then reload."
+          );
+        });
+
+        targetZero.addEventListener("targetFound", () => {
+          console.log("[AR] Raccoon target found");
+          bgm.components.sound.playSound();
+        });
+
+        targetOne.addEventListener("targetFound", () => {
+          console.log("[AR] Bear target found");
+          bgm.components.sound.playSound();
+        });
+
+        targetZero.addEventListener("targetLost", () => {
+          console.log("[AR] Raccoon target lost");
+          bgm.components.sound.pauseSound();
+        });
+
+        targetOne.addEventListener("targetLost", () => {
+          console.log("[AR] Bear target lost");
+          bgm.components.sound.pauseSound();
+        });
+      });
+    </script>
   </head>
   <body>
-    <h1>Say it with songs Multi-Target Demo</h1>
-    <p>
-      Open the demo on your phone, then point it at either target image below.
-    </p>
+    <div class="overlay">
+      <h1>Say it with songs Multi-Target Demo</h1>
+      <p class="tagline">
+        Open this page on your phone, click Start Camera, then point it at either target image below.
+      </p>
 
-    <div class="card">
-      <h2>Scan to open the demo</h2>
-      <img src="qr-code.png" alt="QR code to the demo" width="200" height="200" />
-      <a class="btn" href="demo.html">Open demo</a>
+      <div class="card">
+        <h2>Scan to open on another phone</h2>
+        <img src="qr-code.png" alt="QR code to this demo" width="200" height="200" />
+        <div id="camera-status" class="status-pill" data-tone="ready">Loading scene</div>
+        <p id="camera-helper" class="helper">Waiting for A-Frame and MindAR to finish loading.</p>
+        <button id="start-camera" class="btn" disabled>Start Camera</button>
+      </div>
+
+      <div class="targets">
+        <div class="target">
+          <img src="target-raccoon.png" alt="Raccoon target" />
+          <span>Raccoon Target</span>
+        </div>
+        <div class="target">
+          <img src="target-bear.png" alt="Bear target" />
+          <span>Bear Target</span>
+        </div>
+      </div>
+
+      <p class="note">
+        Tip: you can print this page so the targets are always handy.
+      </p>
     </div>
 
-    <div class="targets">
-      <div class="target">
-        <img src="target-raccoon.png" alt="Raccoon target" />
-        <span>Raccoon Target</span>
-      </div>
-      <div class="target">
-        <img src="target-bear.png" alt="Bear target" />
-        <span>Bear Target</span>
-      </div>
-    </div>
+    <a-scene
+      mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/band.mind; autoStart:false; uiError:no; uiLoading:no; uiScanning:yes;"
+      color-space="sRGB"
+      renderer="colorManagement: true, physicallyCorrectLights, alpha: true"
+      background="transparent: true"
+      vr-mode-ui="enabled: false"
+      device-orientation-permission-ui="enabled: false"
+    >
+      <a-assets>
+        <audio id="sfx" src="aktasok-salsa-151315.mp3" preload="auto" loop></audio>
+        <a-asset-item
+          id="bearModel"
+          src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/bear/scene.gltf"
+        ></a-asset-item>
+        <a-asset-item
+          id="raccoonModel"
+          src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/band-example/raccoon/scene.gltf"
+        ></a-asset-item>
+      </a-assets>
 
-    <p class="note">
-      Tip: you can print this page so the targets are always handy.
-    </p>
+      <a-entity light="type: ambient; intensity: 1.1"></a-entity>
+      <a-entity light="type: directional; intensity: 0.8" position="0 1 1"></a-entity>
+
+      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-entity id="target-zero" mindar-image-target="targetIndex: 0">
+        <a-gltf-model
+          rotation="0 0 0"
+          position="0 -0.25 0"
+          scale="0.05 0.05 0.05"
+          src="#raccoonModel"
+          animation-mixer
+        ></a-gltf-model>
+      </a-entity>
+
+      <a-entity id="target-one" mindar-image-target="targetIndex: 1">
+        <a-gltf-model
+          rotation="0 0 0"
+          position="0 -0.25 0"
+          scale="0.05 0.05 0.05"
+          src="#bearModel"
+          animation-mixer
+        ></a-gltf-model>
+      </a-entity>
+
+      <a-entity id="bgm" sound="src: #sfx; autoplay: false; loop: true; volume: 1"></a-entity>
+    </a-scene>
   </body>
 </html>

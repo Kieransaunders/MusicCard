@@ -6,12 +6,14 @@ This folder contains a static A-Frame + MindAR image-tracking demo based on the 
 
 The site is automatically deployed to Netlify:
 
-- **Homepage (QR + targets):** https://mindar-multi-target-demo.netlify.app
-- **AR demo:** https://mindar-multi-target-demo.netlify.app/demo.html
+- **Live demo:** https://mindar-multi-target-demo.netlify.app
 
-## Markers & QR code
+## How it works
 
-The homepage shows the QR code and both target images at a size that's easy to scan. You can also print it.
+This is a single page that works as both the landing page and the AR demo:
+- On a computer: open the page to see the QR code and both target images.
+- On a phone: scan the QR to open the **same page**, then tap **Start Camera** directly on that page to launch the AR experience. The overlay hides and the camera starts immediately.
+- You can also print the page so the target images are always handy.
 
 
 The QR code and target images are also saved locally in this repo:
@@ -40,8 +42,7 @@ python3 -m http.server 8000 --directory "/Volumes/External/DevExteralHD/MindAR w
 
 Then open:
 
-- http://127.0.0.1:8000 — homepage with QR code and targets
-- http://127.0.0.1:8000/demo.html — AR demo (click **Start Camera** here)
+- http://127.0.0.1:8000 — the demo page with QR code, targets, and **Start Camera** button
 
 ## How to test
 
@@ -61,9 +62,9 @@ Then open:
 ### Local test
 
 1. Serve the folder locally (see [Run locally](#run-locally)).
-2. Open `http://127.0.0.1:8000/demo.html` on a device with a camera.
+2. Open `http://127.0.0.1:8000/` on a device with a camera.
 3. Open `http://127.0.0.1:8000/` on another screen, or print the targets from that page.
-4. Click **Start Camera** and point the camera at the Raccoon or Bear target.
+4. Tap **Start Camera** on the phone and point the camera at the Raccoon or Bear target.
 
 ### Target images
 
