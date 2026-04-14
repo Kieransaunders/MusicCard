@@ -6,7 +6,7 @@ This folder contains a static A-Frame + MindAR image-tracking demo based on the 
 
 The site is automatically deployed to Netlify:
 
-- **Live demo:** https://mindar-multi-target-demo.netlify.app
+- **Live demo:** https://magical-card-ar.netlify.app
 
 ## How it works
 
@@ -48,9 +48,9 @@ Then open:
 
 ### Quick test (live demo)
 
-1. On your phone, open the live demo: **https://mindar-multi-target-demo.netlify.app**
+1. On your phone, open the live demo: **https://magical-card-ar.netlify.app**
    - Or scan the `qr-code.png` to jump straight to it.
-2. On a second device (or a printed page), open the markers page: **https://mindar-multi-target-demo.netlify.app/markers.html**
+2. On a second device (or a printed page), open the markers page: **https://magical-card-ar.netlify.app/markers.html**
 3. Tap **Start Camera** on the phone and allow camera access.
 4. Point the phone at either the **Raccoon** or **Bear** target image.
 5. When tracking locks on:
