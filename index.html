@@ -71,8 +71,8 @@
       .targets {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-        width: min(36rem, 100%);
+        gap: 1.25rem;
+        width: min(48rem, 100%);
       }
 
       .target {
@@ -88,6 +88,8 @@
 
       .target img {
         width: 100%;
+        max-height: 42vh;
+        object-fit: contain;
         border-radius: 0.5rem;
         background: white;
       }
@@ -100,15 +102,22 @@
 
       .btn {
         margin-top: 0.5rem;
-        padding: 0.65rem 1.1rem;
+        padding: 0.9rem 1.6rem;
         border-radius: 999px;
         border: 0;
         background: linear-gradient(135deg, #67e8f9, #a5f3fc);
         color: #082f49;
-        font-size: 0.95rem;
+        font-size: 1.05rem;
         font-weight: 700;
         text-decoration: none;
         cursor: pointer;
+        box-shadow: 0 8px 20px rgba(103, 232, 249, 0.25);
+        transition: transform 120ms ease, box-shadow 120ms ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(103, 232, 249, 0.35);
       }
 
       @media print {
@@ -135,7 +144,7 @@
     <div class="card">
       <h2>Scan to open the demo</h2>
       <img src="qr-code.png" alt="QR code to the demo" width="200" height="200" />
-      <a class="btn" href="demo.html">Open demo</a>
+      <a class="btn" href="demo.html">Start Camera</a>
     </div>
 
     <div class="targets">
