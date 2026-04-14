@@ -1,4 +1,4 @@
-# MindAR Multi-Target Demo
+# Say it with music Multi-Target Demo
 
 This folder contains a static A-Frame + MindAR image-tracking demo based on the official multi-target example.
 

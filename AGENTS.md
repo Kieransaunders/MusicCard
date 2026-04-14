@@ -1,4 +1,4 @@
-# AGENTS.md — MindAR Multi-Target Demo
+# AGENTS.md — Say it with music Multi-Target Demo
 
 > This file is written for AI coding agents. It summarises the project structure, technology stack, conventions, and how to run or modify the demo.
 
