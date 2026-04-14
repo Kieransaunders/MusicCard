@@ -8,7 +8,8 @@
 
 This is a **static, single-page demo** that reproduces the official MindAR multi-target A-Frame example. It runs entirely in the browser and uses the webcam for image-tracked augmented reality.
 
-- **Entry point:** `index.html` — combined homepage and AR demo (shows QR code, target images, and the **Start Camera** button)
+- **Entry point:** `index.html` (homepage showing QR code and target images)
+- **AR demo:** `demo.html` (the A-Frame + MindAR scene)
 - **No build system:** The project is plain HTML/CSS/JS with dependencies loaded from CDN.
 - **Local serve required:** Browsers restrict camera access to secure contexts (`localhost` or HTTPS), so the page must be served with a local web server rather than opened directly from the file system.
 
@@ -30,8 +31,8 @@ This is a **static, single-page demo** that reproduces the official MindAR multi
 
 ```
 /Volumes/External/DevExteralHD/MindAR with example
-├── index.html                                    # Combined homepage + AR demo
-├── demo.html                                     # Redirects to index.html
+├── index.html                                    # Homepage: QR code + target images
+├── demo.html                                     # AR demo page (scene, styles, scripts)
 ├── README.md                                     # Human-facing run instructions & troubleshooting
 ├── aktasok-salsa-151315.mp3                      # Background music for the AR demo
 ├── docs/
@@ -42,8 +43,8 @@ This is a **static, single-page demo** that reproduces the official MindAR multi
 
 ### Key Files
 
-- **`index.html`** — Contains the full A-Frame scene, target images, QR code, instruction overlay, status indicator, and all JavaScript event handling. Users click **Start Camera** directly on this page to launch the AR experience.
-- **`demo.html`** — Simple redirect to `index.html` so old links still work.
+- **`index.html`** — Companion homepage with the QR code, target image previews, and a link to the AR demo.
+- **`demo.html`** — Contains the full A-Frame scene, two `mindar-image-target` entities, an instruction overlay, status indicator, and all JavaScript event handling for camera start / AR ready / target found / target lost.
 - **`README.md`** — Describes how to run the local server, where to find test images, and how to debug camera-permission issues.
 - **`docs/plans/*.md`** — Design and implementation planning artifacts. These are read-only historical records.
 
