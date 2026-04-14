@@ -32,7 +32,7 @@
         inset: 0;
         width: 100vw;
         height: 100vh;
-        z-index: 0;
+        z-index: 1;
       }
 
       .a-canvas {
@@ -51,13 +51,14 @@
         padding: 2rem 1rem;
         overflow-y: auto;
         background: var(--bg);
-        transition: opacity 220ms ease, transform 220ms ease;
+        transition: opacity 220ms ease, transform 220ms ease, visibility 220ms ease;
       }
 
       .overlay.is-dismissed {
         opacity: 0;
         pointer-events: none;
         transform: translateY(-0.5rem);
+        visibility: hidden;
       }
 
       h1 {
