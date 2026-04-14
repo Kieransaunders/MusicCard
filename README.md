@@ -2,6 +2,25 @@
 
 This folder contains a static A-Frame + MindAR image-tracking demo based on the official multi-target example.
 
+## Live demo
+
+The site is automatically deployed to Netlify:
+
+**https://mindar-multi-target-demo.netlify.app**
+
+## Markers & QR code
+
+Open the companion page to see the QR code and both target images at a size that's easy to scan. You can also print this page.
+
+**https://mindar-multi-target-demo.netlify.app/markers.html**
+
+The QR code and target images are also saved locally in this repo:
+
+- `qr-code.png` — opens the live demo
+- `target-raccoon.png` — Raccoon AR target
+- `target-bear.png` — Bear AR target
+- `markers.html` — printable companion page with the QR code and both targets
+
 ## Official documentation
 
 | Topic | Link |
@@ -23,6 +42,7 @@ Then open:
 
 - http://127.0.0.1:8000
 - http://127.0.0.1:8000/index.html
+- http://127.0.0.1:8000/markers.html
 
 Once the page loads, click **Start Camera**.
 
@@ -30,8 +50,8 @@ Once the page loads, click **Start Camera**.
 
 Open these on another device, on another monitor, or print them:
 
-- Raccoon target: https://hiukim.github.io/mind-ar-js-doc/assets/images/raccoon-2ef571baece2ee4724d0d19edf3de791.png
-- Bear target: https://hiukim.github.io/mind-ar-js-doc/assets/images/bear-3c737546fb0bde7a9c45b45ee999d132.png
+- Raccoon target: `target-raccoon.png` (or https://hiukim.github.io/mind-ar-js-doc/assets/images/raccoon-2ef571baece2ee4724d0d19edf3de791.png)
+- Bear target: `target-bear.png` (or https://hiukim.github.io/mind-ar-js-doc/assets/images/bear-3c737546fb0bde7a9c45b45ee999d132.png)
 
 ## Current setup
 
@@ -39,6 +59,7 @@ Open these on another device, on another monitor, or print them:
 - Uses the official hosted example GLTF models
 - Requires internet access for the external scripts and assets
 - Uses a manual **Start Camera** button and status indicator to make camera startup clearer on desktop browsers
+- Deployed to Netlify via the Netlify CLI (`netlify deploy --prod --dir .`)
 
 ### Audio feature
 
