@@ -277,10 +277,11 @@
             "If your browser asks for camera access, allow it and wait a moment."
           );
 
-          const listener = sceneEl.audioListener;
-          if (listener && listener.context && listener.context.state === "suspended") {
-            await listener.context.resume();
-          }
+          // Audio listener resume disabled for now
+          // const listener = sceneEl.audioListener;
+          // if (listener && listener.context && listener.context.state === "suspended") {
+          //   await listener.context.resume();
+          // }
 
           try {
             await arSystem.start();
@@ -313,25 +314,26 @@
           );
         });
 
-        targetZero.addEventListener("targetFound", () => {
-          console.log("[AR] Raccoon target found");
-          bgm.components.sound.playSound();
-        });
+        // Music controls disabled for now — uncomment below to re-enable later
+        // targetZero.addEventListener("targetFound", () => {
+        //   console.log("[AR] Raccoon target found");
+        //   bgm.components.sound.playSound();
+        // });
 
-        targetOne.addEventListener("targetFound", () => {
-          console.log("[AR] Bear target found");
-          bgm.components.sound.playSound();
-        });
+        // targetOne.addEventListener("targetFound", () => {
+        //   console.log("[AR] Bear target found");
+        //   bgm.components.sound.playSound();
+        // });
 
-        targetZero.addEventListener("targetLost", () => {
-          console.log("[AR] Raccoon target lost");
-          bgm.components.sound.pauseSound();
-        });
+        // targetZero.addEventListener("targetLost", () => {
+        //   console.log("[AR] Raccoon target lost");
+        //   bgm.components.sound.pauseSound();
+        // });
 
-        targetOne.addEventListener("targetLost", () => {
-          console.log("[AR] Bear target lost");
-          bgm.components.sound.pauseSound();
-        });
+        // targetOne.addEventListener("targetLost", () => {
+        //   console.log("[AR] Bear target lost");
+        //   bgm.components.sound.pauseSound();
+        // });
       });
     </script>
   </head>
